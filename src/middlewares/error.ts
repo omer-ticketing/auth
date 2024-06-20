@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../utils/Errors/customError";
+import { CustomError } from "../utils/errors/customError";
 
-export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): void => {
     if (err instanceof CustomError) {
-        return res.status(err.statusCode).json({
+        res.status(err.statusCode).json({
             status: "fail",
             errors: err.serializeErrors(),
         });
+		return;
     }
 
     res.status(400).json({

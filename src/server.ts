@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 import app from './app';
 
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 
 const connectToDB = async () => {
 	await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
