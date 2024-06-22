@@ -8,6 +8,7 @@ export interface UserAttrs {
 export interface UserDoc extends mongoose.Document {
 	email: string;
 	password: string;
+	isPasswordCorrect(password: string): Promise<boolean>;
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
