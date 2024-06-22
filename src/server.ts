@@ -11,7 +11,13 @@ const connectToDB = async () => {
 	console.log("Connected to mongoDB...");
 };
 
+// TODO check if this is the right place for the err
+if (!process.env.JWT_SECRET) {
+	throw new Error("JWT must be defined.")
+}
+
 connectToDB();
+
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}...`);

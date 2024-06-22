@@ -1,31 +1,31 @@
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 
 import User from "./models/userModel";
-import { RequestValidationError } from "./utils/errors/requestValidationError";
 import { BadRequestError } from "./utils/errors/badRequestError";
 
-export const getCurrentUser = (req: Request, res: Response): void => {
+export const getCurrentUser = (req: Request, res: Response): Response | void => {
+	if (!req.session?.jwt) {
+		return res.status(400).json({
+			status: 'fail',
+			data: null
+		});
+	}
+	const payload = jwt.verify(req.session.jwt, process.env.JWT_SECRET!);
+
     res.status(200).json({
         status: "success",
-        data: "Hello I'm the current user!",
+        data: payload,
     });
 };
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        throw new RequestValidationError(errors.array());
-    }
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
         throw new BadRequestError("Email is already in use!");
-        return;
     }
 
     const user = await User.build({ email, password });
@@ -41,13 +41,33 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     });
 };
 
-export const signin = (req: Request, res: Response): void => {
+export const signin = async (req: Request, res: Response): Promise<void> => {
+	const { email, password } = req.body;
+	const existingUser = await User.findOne({ email });
+	
+	if (!existingUser) {
+		throw new BadRequestError('Invalid credentials.');
+	}
+	
+	const passwordCorrect = await existingUser.isPasswordCorrect(password);
+	if (!passwordCorrect) {
+		throw new BadRequestError('Invalid credentials.')
+	}
+
+	const userJWT = jwt.sign({ id: existingUser.id, email: existingUser.email }, process.env.JWT_SECRET!);
+	req.session = { jwt: userJWT };
+
     res.status(200).json({
         status: "success",
+		data: {
+			user: existingUser
+		}
     });
 };
 
 export const signout = (req: Request, res: Response): void => {
+	req.session = null;
+
     res.status(200).json({
         status: "success",
     });
