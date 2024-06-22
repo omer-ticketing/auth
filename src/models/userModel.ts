@@ -11,9 +11,22 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "A user must have a password."]
 	},
+},{
+	toJSON: {
+		transform(doc, ret) {
+			ret.id = ret._id;
+			delete ret._id;
+			delete ret.password;
+			delete ret.__v;
+		}
+	}
 });
 
 userSchema.statics.build = async (attrs: UserAttrs) => await User.create(attrs);
+
+userSchema.methods.isPasswordCorrect = async function(password: string): Promise<boolean> {
+    return await bcrypt.compare(password, this.password);
+};
 
 userSchema.pre('save', async function(next) {
 	if (this.isModified('password')) {
@@ -21,6 +34,7 @@ userSchema.pre('save', async function(next) {
 	}
 	next();
 })
+
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 
 export default User;
