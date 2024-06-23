@@ -22,15 +22,15 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
         throw new NotAuthorizedError();
     }
 
-    const payload = jwt.verify(req.session.jwt, process.env.JWT_SECRET!) as UserPayload;
+    const { id, email } = jwt.verify(req.session.jwt, process.env.JWT_SECRET!) as UserPayload;
 
-    const curUser = await User.findById(payload.id);
+    const curUser = await User.findById(id);
     if (!curUser) {
         throw new NotAuthorizedError("The user belonging to this token does no longer exists.");
     }
 
     // TODO maybe add check if the user changed the password after the jwt was issued.
 
-    req.user = payload;
+    req.user = { id, email};
     next();
 };
