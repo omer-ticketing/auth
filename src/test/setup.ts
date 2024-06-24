@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 let mongo: any;
 
 beforeAll(async () => {
-	mongo = new MongoMemoryServer();
+	process.env.JWT_SECRET = 'false secret';
+	mongo = await MongoMemoryServer.create();
 	const mongoUri = mongo.getUri();
 
 	await mongoose.connect(mongoUri);
@@ -19,6 +20,8 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-	await mongo.stop();
+	if (mongo) {
+		await mongo.stop();
+	}
 	await mongoose.connection.close();
 })
