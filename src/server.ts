@@ -13,7 +13,7 @@ const connectToDB = async () => {
 
 // TODO check if this is the right place for the err
 if (!process.env.JWT_SECRET) {
-	throw new Error("JWT must be defined.")
+	throw new Error("JWT secret must be defined.")
 }
 
 connectToDB();
