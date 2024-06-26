@@ -70,6 +70,7 @@ describe("Signup functionality", () => {
         expect(response.get("Set-Cookie")).toBeDefined();
     });
 });
+
 describe("Signin functionality", () => {
     it("Fails when an email that doesn't exist is supplied.", () => {
         return request(app)
@@ -118,3 +119,25 @@ describe("Signin functionality", () => {
 		
     });
 });
+
+describe("Signout functionality", () => {
+	it('Clears the cookie after signing out.', async () => {
+		const signupRes = await request(app)
+			.post('/api/users/signup')
+			.send({
+				email: 'test@test.com',
+				password: 'password'
+			})
+			.expect(201);
+
+		expect(signupRes.get("Set-Cookie")).toBeDefined();
+		
+		const SignoutRes = await request(app)
+			.post('/api/users/signout')
+			.send({})
+			.expect(200);
+		
+		expect(JSON.stringify(SignoutRes.get("Set-Cookie"))).toEqual('[\"session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly\"]')
+
+	})
+})
