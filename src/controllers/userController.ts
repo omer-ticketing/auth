@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 
 export const getCurrentUser = (req: Request, res: Response): void => {
     res.status(200).json({
