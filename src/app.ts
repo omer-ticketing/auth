@@ -1,10 +1,10 @@
 import express from "express";
 import "express-async-errors";
 import cookieSession from "cookie-session";
-import { NotFoundError } from "./utils/errors/notFoundError";
 import { errorHandler } from "./middlewares/error";
 import authRouter from "./routes/authRoutes";
 import userRouter from "./routes/userRoutes";
+import { NotFoundError } from "@omer-ticketing/common";
 
 const app = express();
 app.set("trust proxy", true);

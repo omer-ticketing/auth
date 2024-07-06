@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import User from "../models/userModel";
-import { BadRequestError } from "../utils/errors/badRequestError";
+import { BadRequestError } from "@omer-ticketing/common";
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;

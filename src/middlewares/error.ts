@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../utils/errors/customError";
+import { CustomError } from "@omer-ticketing/common";
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction): Response | void => {
     if (err instanceof CustomError) {

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { NotAuthorizedError } from "../utils/errors/notAuthorizedError";
+import { NotAuthorizedError } from "@omer-ticketing/common";
 import User from "../models/userModel";
 
 interface UserPayload {
@@ -31,6 +31,6 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
 
     // TODO maybe add check if the user changed the password after the jwt was issued.
 
-    req.user = { id, email};
+    req.user = { id, email };
     next();
 };
