@@ -1,5 +1,5 @@
 import * as userController from '../controllers/userController';
-import * as authMiddlewares from '../middlewares/authMiddlewares';
+import { authMiddlewares} from '@omer-ticketing/common';
 import express from 'express';
 
 const router = express.Router();
