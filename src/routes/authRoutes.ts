@@ -1,7 +1,7 @@
 import express from 'express';
 import * as authController from '../controllers/authController';
 import { validateSignin, validateSignup } from '../utils/validators/userValidator';
-import { validateRequest } from '../middlewares/validateRequest';
+import { validateRequest } from '@omer-ticketing/common';
 
 const router = express.Router();
 
