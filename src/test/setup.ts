@@ -12,10 +12,14 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-	const collections = await mongoose.connection.db.collections();
-
-	for (const collection of collections) {
-		await collection.deleteMany();
+	if (mongoose.connection.db) {
+		const collections = await mongoose.connection.db.collections();
+	
+		for (const collection of collections) {
+			await collection.deleteMany();
+		}
+	} else {
+		console.warn('Database connection not established');
 	}
 });
 

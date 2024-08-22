@@ -12,6 +12,6 @@ export interface UserDoc extends mongoose.Document {
 }
 
 export interface UserModel extends mongoose.Model<UserDoc> {
-    build(attrs: UserAttrs): UserDoc;
+    build(attrs: UserAttrs): Promise<UserDoc>;
 }
 
